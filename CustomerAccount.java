@@ -1,9 +1,10 @@
 import java.util.ArrayList;
+import java.util.List;
 
 public class CustomerAccount {
 	String number;
 	double balance;
-	ArrayList<AccountTransaction> transactionList = new ArrayList<AccountTransaction>();
+	List<AccountTransaction> transactionList = new ArrayList<>();
 
 	// Blank Constructor
 	public CustomerAccount() {
@@ -13,7 +14,7 @@ public class CustomerAccount {
 	}
 
 	// Constructor with Details
-	public CustomerAccount(String number, double balance, ArrayList<AccountTransaction> transactionList) {
+	public CustomerAccount(String number, double balance, List<AccountTransaction> transactionList) {
 		this.number = number;
 		this.balance = balance;
 		this.transactionList = transactionList;
@@ -28,7 +29,7 @@ public class CustomerAccount {
 		return this.balance;
 	}
 
-	public ArrayList getTransactionList() {
+	public List<AccountTransaction> getTransactionList() {
 		return this.transactionList;
 	}
 
@@ -41,7 +42,7 @@ public class CustomerAccount {
 		this.balance = balance;
 	}
 
-	public void setTransactionList(ArrayList transactionList) {
+	public void setTransactionList(List<AccountTransaction>  transactionList) {
 		this.transactionList = transactionList;
 	}
 }
