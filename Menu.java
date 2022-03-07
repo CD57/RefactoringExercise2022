@@ -5,22 +5,30 @@ import javax.swing.*;
 import java.util.Date;
 
 public class Menu extends JFrame {
-	private ArrayList<Customer> customerList = new ArrayList<Customer>();
-	private int position = 0;
-	private String password;
+	private ArrayList<Customer> customerList = new ArrayList<>();
 	private Customer customer = null;
 	private CustomerAccount acc = new CustomerAccount();
-	JFrame f, f1;
-	JLabel firstNameLabel, surnameLabel, pPPSLabel, dOBLabel;
-	JTextField firstNameTextField, surnameTextField, pPSTextField, dOBTextField;
-	JLabel customerIDLabel, passwordLabel;
-	JTextField customerIDTextField, passwordTextField;
-	Container content;
-	Customer e;
+	private int position = 0;
+	private String password;
 
-	JPanel panel2;
+	Customer e;
+	JFrame jFrame1;
+	JFrame jFrame2;
+	JLabel firstNameLabel;
+	JLabel surnameLabel;
+	JLabel ppsJLabel;
+	JLabel dobJLabel;
+	JTextField firstNameTextField;
+	JTextField surnameTextField;
+	JTextField ppsTextField;
+	JTextField dobTextField;
+	JLabel customerIDLabel;
+	JLabel passwordLabel;
+	JTextField customerIDTextField;
+	JTextField passwordTextField;
+	Container contentContainer;
+
 	JButton add;
-	String PPS, firstName, surname, DOB, CustomerID;
 
 	public static void main(String[] args) {
 		Menu driver = new Menu();
@@ -34,10 +42,11 @@ public class Menu extends JFrame {
 		 * if they are a new customer, or will ask them to log in if they are an
 		 * existing customer or admin.
 		 */
-		f = new JFrame("User Type");
-		f.setSize(400, 300);
-		f.setLocation(200, 200);
-		f.addWindowListener(new WindowAdapter() {
+		jFrame1 = new JFrame("User Type");
+		jFrame1.setSize(400, 300);
+		jFrame1.setLocation(200, 200);
+		jFrame1.addWindowListener(new WindowAdapter() {
+			@Override
 			public void windowClosing(WindowEvent we) {
 				System.exit(0);
 			}
@@ -62,10 +71,10 @@ public class Menu extends JFrame {
 		JButton continueButton = new JButton("Continue");
 		continuePanel.add(continueButton);
 
-		Container content = f.getContentPane();
-		content.setLayout(new GridLayout(2, 1));
-		content.add(userTypePanel);
-		content.add(continuePanel);
+		contentContainer = jFrame1.getContentPane();
+		contentContainer.setLayout(new GridLayout(2, 1));
+		contentContainer.add(userTypePanel);
+		contentContainer.add(continuePanel);
 
 		continueButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
@@ -74,57 +83,58 @@ public class Menu extends JFrame {
 				// if user selects NEW
 				// CUSTOMER--------------------------------------------------------------------------------------
 				if (user.equals("New Customer")) {
-					f.dispose();
-					f1 = new JFrame("Create New Customer");
-					f1.setSize(400, 300);
-					f1.setLocation(200, 200);
-					f1.addWindowListener(new WindowAdapter() {
+					jFrame1.dispose();
+					jFrame2 = new JFrame("Create New Customer");
+					jFrame2.setSize(400, 300);
+					jFrame2.setLocation(200, 200);
+					jFrame2.addWindowListener(new WindowAdapter() {
+						@Override
 						public void windowClosing(WindowEvent we) {
 							System.exit(0);
 						}
 					});
-					Container content = f1.getContentPane();
-					content.setLayout(new BorderLayout());
+					contentContainer = jFrame2.getContentPane();
+					contentContainer.setLayout(new BorderLayout());
 
 					firstNameLabel = new JLabel("First Name:", SwingConstants.RIGHT);
 					surnameLabel = new JLabel("Surname:", SwingConstants.RIGHT);
-					pPPSLabel = new JLabel("PPS Number:", SwingConstants.RIGHT);
-					dOBLabel = new JLabel("Date of birth", SwingConstants.RIGHT);
+					ppsJLabel = new JLabel("pps Number:", SwingConstants.RIGHT);
+					dobJLabel = new JLabel("Date of birth", SwingConstants.RIGHT);
 					firstNameTextField = new JTextField(20);
 					surnameTextField = new JTextField(20);
-					pPSTextField = new JTextField(20);
-					dOBTextField = new JTextField(20);
+					ppsTextField = new JTextField(20);
+					dobTextField = new JTextField(20);
 					JPanel panel = new JPanel(new GridLayout(6, 2));
 					panel.add(firstNameLabel);
 					panel.add(firstNameTextField);
 					panel.add(surnameLabel);
 					panel.add(surnameTextField);
-					panel.add(pPPSLabel);
-					panel.add(pPSTextField);
-					panel.add(dOBLabel);
-					panel.add(dOBTextField);
+					panel.add(ppsJLabel);
+					panel.add(ppsTextField);
+					panel.add(dobJLabel);
+					panel.add(dobTextField);
 
-					panel2 = new JPanel();
+					JPanel panel2 = new JPanel();
 					add = new JButton("Add");
 
 					add.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent e) {
 
-							PPS = pPSTextField.getText();
-							firstName = firstNameTextField.getText();
-							surname = surnameTextField.getText();
-							DOB = dOBTextField.getText();
+							String pps = ppsTextField.getText();
+							String firstName = firstNameTextField.getText();
+							String surname = surnameTextField.getText();
+							String dob = dobTextField.getText();
 							password = "";
 
-							CustomerID = "ID" + PPS;
+							String customerId = "ID" + pps;
 
 							add.addActionListener(new ActionListener() {
 								public void actionPerformed(ActionEvent e) {
-									f1.dispose();
+									jFrame2.dispose();
 
 									boolean loop = true;
 									while (loop) {
-										password = JOptionPane.showInputDialog(f, "Enter 7 character Password;");
+										password = JOptionPane.showInputDialog(jFrame1, "Enter 7 character Password;");
 
 										if (password.length() != 7)// Making sure password is 7 characters
 										{
@@ -136,16 +146,16 @@ public class Menu extends JFrame {
 									}
 
 									ArrayList<CustomerAccount> accounts = new ArrayList<CustomerAccount>();
-									Customer customer = new Customer(PPS, surname, firstName, DOB, CustomerID, password,
+									customer = new Customer(pps, surname, firstName, dob, customerId, password,
 											accounts);
 
 									customerList.add(customer);
 
-									JOptionPane.showMessageDialog(f,
-											"CustomerID = " + CustomerID + "\n Password = " + password,
+									JOptionPane.showMessageDialog(jFrame1,
+											"customerId = " + customerId + "\n Password = " + password,
 											"Customer created.", JOptionPane.INFORMATION_MESSAGE);
 									menuStart();
-									f.dispose();
+									jFrame1.dispose();
 								}
 							});
 						}
@@ -153,7 +163,7 @@ public class Menu extends JFrame {
 					JButton cancel = new JButton("Cancel");
 					cancel.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent e) {
-							f1.dispose();
+							jFrame2.dispose();
 							menuStart();
 						}
 					});
@@ -161,19 +171,20 @@ public class Menu extends JFrame {
 					panel2.add(add);
 					panel2.add(cancel);
 
-					content.add(panel, BorderLayout.CENTER);
-					content.add(panel2, BorderLayout.SOUTH);
+					contentContainer.add(panel, BorderLayout.CENTER);
+					contentContainer.add(panel2, BorderLayout.SOUTH);
 
-					f1.setVisible(true);
+					jFrame2.setVisible(true);
 				}
 				// ----------------------
 				// if user select ADMIN
 				// ----------------------
 				if (user.equals("Administrator")) {
-					boolean loop = true, loop2 = true;
+					boolean loop = true;
+					boolean loop2 = true;
 					boolean cont = false;
 					while (loop) {
-						Object adminUsername = JOptionPane.showInputDialog(f, "Enter Administrator Username:");
+						Object adminUsername = JOptionPane.showInputDialog(jFrame1, "Enter Administrator Username:");
 
 						if (!adminUsername.equals("admin"))// search admin list for admin with matching admin username
 						{
@@ -182,7 +193,7 @@ public class Menu extends JFrame {
 							if (reply == JOptionPane.YES_OPTION) {
 								loop = true;
 							} else if (reply == JOptionPane.NO_OPTION) {
-								f1.dispose();
+								jFrame2.dispose();
 								loop = false;
 								loop2 = false;
 								menuStart();
@@ -193,16 +204,14 @@ public class Menu extends JFrame {
 					}
 
 					while (loop2) {
-						Object adminPassword = JOptionPane.showInputDialog(f, "Enter Administrator Password;");
+						Object adminPassword = JOptionPane.showInputDialog(jFrame1, "Enter Administrator Password;");
 
 						if (!adminPassword.equals("admin11"))// search admin list for admin with matching admin password
 						{
 							int reply = JOptionPane.showConfirmDialog(null, null, "Incorrect Password. Try again?",
 									JOptionPane.YES_NO_OPTION);
-							if (reply == JOptionPane.YES_OPTION) {
-
-							} else if (reply == JOptionPane.NO_OPTION) {
-								f1.dispose();
+							if (reply == JOptionPane.NO_OPTION) {
+								jFrame2.dispose();
 								loop2 = false;
 								menuStart();
 							}
@@ -212,8 +221,7 @@ public class Menu extends JFrame {
 						}
 					}
 					if (cont) {
-						f1.dispose();
-						loop = false;
+						jFrame2.dispose();
 						admin();
 					}
 				}
@@ -221,12 +229,13 @@ public class Menu extends JFrame {
 				// if user selects CUSTOMER
 				// -------------------------
 				if (user.equals("Customer")) {
-					boolean loop = true, loop2 = true;
+					boolean loop = true;
+					boolean loop2 = true;
 					boolean cont = false;
 					boolean found = false;
-					Customer customer = null;
+					customer = null;
 					while (loop) {
-						Object customerID = JOptionPane.showInputDialog(f, "Enter Customer ID:");
+						Object customerID = JOptionPane.showInputDialog(jFrame1, "Enter Customer ID:");
 
 						for (Customer aCustomer : customerList) {
 
@@ -238,13 +247,13 @@ public class Menu extends JFrame {
 							}
 						}
 
-						if (found == false) {
+						if (!found) {
 							int reply = JOptionPane.showConfirmDialog(null, null, "User not found. Try again?",
 									JOptionPane.YES_NO_OPTION);
 							if (reply == JOptionPane.YES_OPTION) {
 								loop = true;
 							} else if (reply == JOptionPane.NO_OPTION) {
-								f.dispose();
+								jFrame1.dispose();
 								loop = false;
 								loop2 = false;
 								menuStart();
@@ -255,16 +264,14 @@ public class Menu extends JFrame {
 					}
 
 					while (loop2) {
-						Object customerPassword = JOptionPane.showInputDialog(f, "Enter Customer Password;");
+						Object customerPassword = JOptionPane.showInputDialog(jFrame1, "Enter Customer Password;");
 
 						if (!customer.getPassword().equals(customerPassword))// check if custoemr password is correct
 						{
 							int reply = JOptionPane.showConfirmDialog(null, null, "Incorrect password. Try again?",
 									JOptionPane.YES_NO_OPTION);
-							if (reply == JOptionPane.YES_OPTION) {
-
-							} else if (reply == JOptionPane.NO_OPTION) {
-								f.dispose();
+							if (reply == JOptionPane.NO_OPTION) {
+								jFrame1.dispose();
 								loop2 = false;
 								menuStart();
 							}
@@ -275,28 +282,28 @@ public class Menu extends JFrame {
 					}
 
 					if (cont) {
-						f.dispose();
-						loop = false;
+						jFrame1.dispose();
 						customer(customer);
 					}
 				}
 			}
 		});
-		f.setVisible(true);
+		jFrame1.setVisible(true);
 	}
 
 	public void admin() {
 		dispose();
 
-		f = new JFrame("Administrator Menu");
-		f.setSize(400, 400);
-		f.setLocation(200, 200);
-		f.addWindowListener(new WindowAdapter() {
+		jFrame1 = new JFrame("Administrator Menu");
+		jFrame1.setSize(400, 400);
+		jFrame1.setLocation(200, 200);
+		jFrame1.addWindowListener(new WindowAdapter() {
+			@Override
 			public void windowClosing(WindowEvent we) {
 				System.exit(0);
 			}
 		});
-		f.setVisible(true);
+		jFrame1.setVisible(true);
 
 		JPanel deleteCustomerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JButton deleteCustomer = new JButton("Delete Customer");
@@ -344,18 +351,17 @@ public class Menu extends JFrame {
 
 		JLabel label1 = new JLabel("Please select an option");
 
-		content = f.getContentPane();
-		content.setLayout(new GridLayout(9, 1));
-		content.add(label1);
-		content.add(accountPanel);
-		content.add(bankChargesPanel);
-		content.add(interestPanel);
-		content.add(editCustomerPanel);
-		content.add(navigatePanel);
-		content.add(summaryPanel);
-		content.add(deleteCustomerPanel);
-		// content.add(deleteAccountPanel);
-		content.add(returnPanel);
+		contentContainer = jFrame1.getContentPane();
+		contentContainer.setLayout(new GridLayout(9, 1));
+		contentContainer.add(label1);
+		contentContainer.add(accountPanel);
+		contentContainer.add(bankChargesPanel);
+		contentContainer.add(interestPanel);
+		contentContainer.add(editCustomerPanel);
+		contentContainer.add(navigatePanel);
+		contentContainer.add(summaryPanel);
+		contentContainer.add(deleteCustomerPanel);
+		contentContainer.add(returnPanel);
 
 		bankChargesButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
@@ -363,13 +369,13 @@ public class Menu extends JFrame {
 				boolean found = false;
 
 				if (customerList.isEmpty()) {
-					JOptionPane.showMessageDialog(f, "There are no customers yet!", "Oops!",
+					JOptionPane.showMessageDialog(jFrame1, "There are no customers yet!", "Oops!",
 							JOptionPane.INFORMATION_MESSAGE);
-					f.dispose();
+					jFrame1.dispose();
 					admin();
 				} else {
 					while (loop) {
-						Object customerID = JOptionPane.showInputDialog(f,
+						Object customerID = JOptionPane.showInputDialog(jFrame1,
 								"Customer ID of Customer You Wish to Apply Charges to:");
 						for (Customer aCustomer : customerList) {
 							if (aCustomer.getCustomerID().equals(customerID)) {
@@ -378,30 +384,31 @@ public class Menu extends JFrame {
 								loop = false;
 							}
 						}
-						if (found == false) {
+						if (!found) {
 							int reply = JOptionPane.showConfirmDialog(null, null, "User not found. Try again?",
 									JOptionPane.YES_NO_OPTION);
 							if (reply == JOptionPane.YES_OPTION) {
 								loop = true;
 							} else if (reply == JOptionPane.NO_OPTION) {
-								f.dispose();
+								jFrame1.dispose();
 								loop = false;
 
 								admin();
 							}
 						} else {
-							f.dispose();
-							f = new JFrame("Administrator Menu");
-							f.setSize(400, 300);
-							f.setLocation(200, 200);
-							f.addWindowListener(new WindowAdapter() {
+							jFrame1.dispose();
+							jFrame1 = new JFrame("Administrator Menu");
+							jFrame1.setSize(400, 300);
+							jFrame1.setLocation(200, 200);
+							jFrame1.addWindowListener(new WindowAdapter() {
+								@Override
 								public void windowClosing(WindowEvent we) {
 									System.exit(0);
 								}
 							});
-							f.setVisible(true);
+							jFrame1.setVisible(true);
 
-							JComboBox<String> box = new JComboBox<String>();
+							JComboBox<String> box = new JComboBox<>();
 							for (int i = 0; i < customer.getAccounts().size(); i++) {
 
 								box.addItem(customer.getAccounts().get(i).getNumber());
@@ -416,17 +423,17 @@ public class Menu extends JFrame {
 							JButton returnButton = new JButton("Return");
 							buttonPanel.add(continueButton);
 							buttonPanel.add(returnButton);
-							Container content = f.getContentPane();
-							content.setLayout(new GridLayout(2, 1));
+							contentContainer = jFrame1.getContentPane();
+							contentContainer.setLayout(new GridLayout(2, 1));
 
-							content.add(boxPanel);
-							content.add(buttonPanel);
+							contentContainer.add(boxPanel);
+							contentContainer.add(buttonPanel);
 
 							if (customer.getAccounts().isEmpty()) {
-								JOptionPane.showMessageDialog(f,
+								JOptionPane.showMessageDialog(jFrame1,
 										"This customer has no accounts! \n The admin must add acounts to this customer.",
 										"Oops!", JOptionPane.INFORMATION_MESSAGE);
-								f.dispose();
+								jFrame1.dispose();
 								admin();
 							} else {
 
@@ -442,31 +449,31 @@ public class Menu extends JFrame {
 
 										if (acc instanceof CustomerDepositAccount) {
 
-											JOptionPane.showMessageDialog(f,
+											JOptionPane.showMessageDialog(jFrame1,
 													"25" + euro + " deposit account fee aplied.", "",
 													JOptionPane.INFORMATION_MESSAGE);
 											acc.setBalance(acc.getBalance() - 25);
-											JOptionPane.showMessageDialog(f, "New balance = " + acc.getBalance(),
+											JOptionPane.showMessageDialog(jFrame1, "New balance = " + acc.getBalance(),
 													"Success!", JOptionPane.INFORMATION_MESSAGE);
 										}
 
 										if (acc instanceof CustomerCurrentAccount) {
 
-											JOptionPane.showMessageDialog(f,
+											JOptionPane.showMessageDialog(jFrame1,
 													"15" + euro + " current account fee aplied.", "",
 													JOptionPane.INFORMATION_MESSAGE);
 											acc.setBalance(acc.getBalance() - 25);
-											JOptionPane.showMessageDialog(f, "New balance = " + acc.getBalance(),
+											JOptionPane.showMessageDialog(jFrame1, "New balance = " + acc.getBalance(),
 													"Success!", JOptionPane.INFORMATION_MESSAGE);
 										}
-										f.dispose();
+										jFrame1.dispose();
 										admin();
 									}
 								});
 
 								returnButton.addActionListener(new ActionListener() {
 									public void actionPerformed(ActionEvent ae) {
-										f.dispose();
+										jFrame1.dispose();
 										menuStart();
 									}
 								});
@@ -483,13 +490,13 @@ public class Menu extends JFrame {
 				boolean found = false;
 
 				if (customerList.isEmpty()) {
-					JOptionPane.showMessageDialog(f, "There are no customers yet!", "Oops!",
+					JOptionPane.showMessageDialog(jFrame1, "There are no customers yet!", "Oops!",
 							JOptionPane.INFORMATION_MESSAGE);
-					f.dispose();
+					jFrame1.dispose();
 					admin();
 				} else {
 					while (loop) {
-						Object customerID = JOptionPane.showInputDialog(f,
+						Object customerID = JOptionPane.showInputDialog(jFrame1,
 								"Customer ID of Customer You Wish to Apply Interest to:");
 
 						for (Customer aCustomer : customerList) {
@@ -507,22 +514,23 @@ public class Menu extends JFrame {
 							if (reply == JOptionPane.YES_OPTION) {
 								loop = true;
 							} else if (reply == JOptionPane.NO_OPTION) {
-								f.dispose();
+								jFrame1.dispose();
 								loop = false;
 
 								admin();
 							}
 						} else {
-							f.dispose();
-							f = new JFrame("Administrator Menu");
-							f.setSize(400, 300);
-							f.setLocation(200, 200);
-							f.addWindowListener(new WindowAdapter() {
+							jFrame1.dispose();
+							jFrame1 = new JFrame("Administrator Menu");
+							jFrame1.setSize(400, 300);
+							jFrame1.setLocation(200, 200);
+							jFrame1.addWindowListener(new WindowAdapter() {
+								@Override
 								public void windowClosing(WindowEvent we) {
 									System.exit(0);
 								}
 							});
-							f.setVisible(true);
+							jFrame1.setVisible(true);
 
 							JComboBox<String> box = new JComboBox<String>();
 							for (int i = 0; i < customer.getAccounts().size(); i++) {
@@ -542,17 +550,17 @@ public class Menu extends JFrame {
 							JButton returnButton = new JButton("Return");
 							buttonPanel.add(continueButton);
 							buttonPanel.add(returnButton);
-							Container content = f.getContentPane();
-							content.setLayout(new GridLayout(2, 1));
+							contentContainer = jFrame1.getContentPane();
+							contentContainer.setLayout(new GridLayout(2, 1));
 
-							content.add(boxPanel);
-							content.add(buttonPanel);
+							contentContainer.add(boxPanel);
+							contentContainer.add(buttonPanel);
 
 							if (customer.getAccounts().isEmpty()) {
-								JOptionPane.showMessageDialog(f,
+								JOptionPane.showMessageDialog(jFrame1,
 										"This customer has no accounts! \n The admin must add acounts to this customer.",
 										"Oops!", JOptionPane.INFORMATION_MESSAGE);
-								f.dispose();
+								jFrame1.dispose();
 								admin();
 							} else {
 
@@ -569,7 +577,7 @@ public class Menu extends JFrame {
 										boolean loop = true;
 
 										while (loop) {
-											String interestString = JOptionPane.showInputDialog(f,
+											String interestString = JOptionPane.showInputDialog(jFrame1,
 													"Enter interest percentage you wish to apply: \n NOTE: Please enter a numerical value. (with no percentage sign) \n E.g: If you wish to apply 8% interest, enter '8'");
 											// the isNumeric method tests to see if the string entered was numeric.
 											if (isNumeric(interestString)) {
@@ -580,22 +588,23 @@ public class Menu extends JFrame {
 												acc.setBalance(
 														acc.getBalance() + (acc.getBalance() * (interest / 100)));
 
-												JOptionPane.showMessageDialog(f,
+												JOptionPane.showMessageDialog(jFrame1,
 														interest + "% interest applied. \n new balance = "
 																+ acc.getBalance() + euro,
 														"Success!", JOptionPane.INFORMATION_MESSAGE);
 											} else {
-												JOptionPane.showMessageDialog(f, "You must enter a numerical value!",
+												JOptionPane.showMessageDialog(jFrame1,
+														"You must enter a numerical value!",
 														"Oops!", JOptionPane.INFORMATION_MESSAGE);
 											}
 										}
-										f.dispose();
+										jFrame1.dispose();
 										admin();
 									}
 								});
 								returnButton.addActionListener(new ActionListener() {
 									public void actionPerformed(ActionEvent ae) {
-										f.dispose();
+										jFrame1.dispose();
 										menuStart();
 									}
 								});
@@ -612,14 +621,14 @@ public class Menu extends JFrame {
 				boolean found = false;
 
 				if (customerList.isEmpty()) {
-					JOptionPane.showMessageDialog(f, "There are no customers yet!", "Oops!",
+					JOptionPane.showMessageDialog(jFrame1, "There are no customers yet!", "Oops!",
 							JOptionPane.INFORMATION_MESSAGE);
-					f.dispose();
+					jFrame1.dispose();
 					admin();
 
 				} else {
 					while (loop) {
-						Object customerID = JOptionPane.showInputDialog(f, "Enter Customer ID:");
+						Object customerID = JOptionPane.showInputDialog(jFrame1, "Enter Customer ID:");
 
 						for (Customer aCustomer : customerList) {
 
@@ -635,7 +644,7 @@ public class Menu extends JFrame {
 							if (reply == JOptionPane.YES_OPTION) {
 								loop = true;
 							} else if (reply == JOptionPane.NO_OPTION) {
-								f.dispose();
+								jFrame1.dispose();
 								loop = false;
 								admin();
 							}
@@ -644,12 +653,13 @@ public class Menu extends JFrame {
 						}
 					}
 
-					f.dispose();
-					f.dispose();
-					f = new JFrame("Administrator Menu");
-					f.setSize(400, 300);
-					f.setLocation(200, 200);
-					f.addWindowListener(new WindowAdapter() {
+					jFrame1.dispose();
+					jFrame1.dispose();
+					jFrame1 = new JFrame("Administrator Menu");
+					jFrame1.setSize(400, 300);
+					jFrame1.setLocation(200, 200);
+					jFrame1.addWindowListener(new WindowAdapter() {
+						@Override
 						public void windowClosing(WindowEvent we) {
 							System.exit(0);
 						}
@@ -657,14 +667,14 @@ public class Menu extends JFrame {
 
 					firstNameLabel = new JLabel("First Name:", SwingConstants.LEFT);
 					surnameLabel = new JLabel("Surname:", SwingConstants.LEFT);
-					pPPSLabel = new JLabel("PPS Number:", SwingConstants.LEFT);
-					dOBLabel = new JLabel("Date of birth", SwingConstants.LEFT);
-					customerIDLabel = new JLabel("CustomerID:", SwingConstants.LEFT);
+					ppsJLabel = new JLabel("pps Number:", SwingConstants.LEFT);
+					dobJLabel = new JLabel("Date of birth", SwingConstants.LEFT);
+					customerIDLabel = new JLabel("customerId:", SwingConstants.LEFT);
 					passwordLabel = new JLabel("Password:", SwingConstants.LEFT);
 					firstNameTextField = new JTextField(20);
 					surnameTextField = new JTextField(20);
-					pPSTextField = new JTextField(20);
-					dOBTextField = new JTextField(20);
+					ppsTextField = new JTextField(20);
+					dobTextField = new JTextField(20);
 					customerIDTextField = new JTextField(20);
 					passwordTextField = new JTextField(20);
 
@@ -676,10 +686,10 @@ public class Menu extends JFrame {
 					textPanel.add(firstNameTextField);
 					textPanel.add(surnameLabel);
 					textPanel.add(surnameTextField);
-					textPanel.add(pPPSLabel);
-					textPanel.add(pPSTextField);
-					textPanel.add(dOBLabel);
-					textPanel.add(dOBTextField);
+					textPanel.add(ppsJLabel);
+					textPanel.add(ppsTextField);
+					textPanel.add(dobJLabel);
+					textPanel.add(dobTextField);
 					textPanel.add(customerIDLabel);
 					textPanel.add(customerIDTextField);
 					textPanel.add(passwordLabel);
@@ -687,36 +697,33 @@ public class Menu extends JFrame {
 
 					firstNameTextField.setText(customer.getFirstName());
 					surnameTextField.setText(customer.getSurname());
-					pPSTextField.setText(customer.getPPS());
-					dOBTextField.setText(customer.getDOB());
+					ppsTextField.setText(customer.getPPS());
+					dobTextField.setText(customer.getDOB());
 					customerIDTextField.setText(customer.getCustomerID());
 					passwordTextField.setText(customer.getPassword());
-
-					// JLabel label1 = new JLabel("Edit customer details below. The save");
 
 					JButton saveButton = new JButton("Save");
 					JButton cancelButton = new JButton("Exit");
 
 					cancelPanel.add(cancelButton, BorderLayout.SOUTH);
-					cancelPanel.add(saveButton, BorderLayout.SOUTH);
-					// content.removeAll();
-					Container content = f.getContentPane();
-					content.setLayout(new GridLayout(2, 1));
-					content.add(textPanel, BorderLayout.NORTH);
-					content.add(cancelPanel, BorderLayout.SOUTH);
+					cancelPanel.add(saveButton, BorderLayout.SOUTH); //
+					contentContainer = jFrame1.getContentPane();
+					contentContainer.setLayout(new GridLayout(2, 1));
+					contentContainer.add(textPanel, BorderLayout.NORTH);
+					contentContainer.add(cancelPanel, BorderLayout.SOUTH);
 
-					f.setContentPane(content);
-					f.setSize(340, 350);
-					f.setLocation(200, 200);
-					f.setVisible(true);
-					f.setResizable(false);
+					jFrame1.setContentPane(contentContainer);
+					jFrame1.setSize(340, 350);
+					jFrame1.setLocation(200, 200);
+					jFrame1.setVisible(true);
+					jFrame1.setResizable(false);
 
 					saveButton.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent ae) {
 							customer.setFirstName(firstNameTextField.getText());
 							customer.setSurname(surnameTextField.getText());
-							customer.setPPS(pPSTextField.getText());
-							customer.setDOB(dOBTextField.getText());
+							customer.setPPS(ppsTextField.getText());
+							customer.setDOB(dobTextField.getText());
 							customer.setCustomerID(customerIDTextField.getText());
 							customer.setPassword(passwordTextField.getText());
 
@@ -726,7 +733,7 @@ public class Menu extends JFrame {
 
 					cancelButton.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent ae) {
-							f.dispose();
+							jFrame1.dispose();
 							admin();
 						}
 					});
@@ -736,17 +743,18 @@ public class Menu extends JFrame {
 
 		summaryButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
-				f.dispose();
+				jFrame1.dispose();
 
-				f = new JFrame("Summary of Transactions");
-				f.setSize(400, 700);
-				f.setLocation(200, 200);
-				f.addWindowListener(new WindowAdapter() {
+				jFrame1 = new JFrame("Summary of Transactions");
+				jFrame1.setSize(400, 700);
+				jFrame1.setLocation(200, 200);
+				jFrame1.addWindowListener(new WindowAdapter() {
+					@Override
 					public void windowClosing(WindowEvent we) {
 						System.exit(0);
 					}
 				});
-				f.setVisible(true);
+				jFrame1.setVisible(true);
 
 				JLabel label1 = new JLabel("Summary of all transactions: ");
 
@@ -779,17 +787,15 @@ public class Menu extends JFrame {
 				}
 
 				textPanel.add(textArea);
-				content.removeAll();
+				contentContainer.removeAll();
 
-				Container content = f.getContentPane();
-				content.setLayout(new GridLayout(1, 1));
-				// content.add(label1);
-				content.add(textPanel);
-				// content.add(returnPanel);
+				contentContainer = jFrame1.getContentPane();
+				contentContainer.setLayout(new GridLayout(1, 1));
+				contentContainer.add(textPanel);
 
 				returnButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent ae) {
-						f.dispose();
+						jFrame1.dispose();
 						admin();
 					}
 				});
@@ -798,19 +804,24 @@ public class Menu extends JFrame {
 
 		navigateButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
-				f.dispose();
+				jFrame1.dispose();
 
 				if (customerList.isEmpty()) {
 					JOptionPane.showMessageDialog(null, "There are currently no customers to display. ");
 					admin();
 				} else {
+					JButton first;
+					JButton previous;
+					JButton next;
+					JButton last;
+					JButton cancel;
+					JPanel gridPanel;
+					JPanel buttonPanel;
+					JPanel cancelPanel;
 
-					JButton first, previous, next, last, cancel;
-					JPanel gridPanel, buttonPanel, cancelPanel;
+					contentContainer = getContentPane();
 
-					Container content = getContentPane();
-
-					content.setLayout(new BorderLayout());
+					contentContainer.setLayout(new BorderLayout());
 
 					buttonPanel = new JPanel();
 					gridPanel = new JPanel(new GridLayout(8, 2));
@@ -818,14 +829,14 @@ public class Menu extends JFrame {
 
 					firstNameLabel = new JLabel("First Name:", SwingConstants.LEFT);
 					surnameLabel = new JLabel("Surname:", SwingConstants.LEFT);
-					pPPSLabel = new JLabel("PPS Number:", SwingConstants.LEFT);
-					dOBLabel = new JLabel("Date of birth", SwingConstants.LEFT);
-					customerIDLabel = new JLabel("CustomerID:", SwingConstants.LEFT);
+					ppsJLabel = new JLabel("pps Number:", SwingConstants.LEFT);
+					dobJLabel = new JLabel("Date of birth", SwingConstants.LEFT);
+					customerIDLabel = new JLabel("customerId:", SwingConstants.LEFT);
 					passwordLabel = new JLabel("Password:", SwingConstants.LEFT);
 					firstNameTextField = new JTextField(20);
 					surnameTextField = new JTextField(20);
-					pPSTextField = new JTextField(20);
-					dOBTextField = new JTextField(20);
+					ppsTextField = new JTextField(20);
+					dobTextField = new JTextField(20);
 					customerIDTextField = new JTextField(20);
 					passwordTextField = new JTextField(20);
 
@@ -837,15 +848,15 @@ public class Menu extends JFrame {
 
 					firstNameTextField.setText(customerList.get(0).getFirstName());
 					surnameTextField.setText(customerList.get(0).getSurname());
-					pPSTextField.setText(customerList.get(0).getPPS());
-					dOBTextField.setText(customerList.get(0).getDOB());
+					ppsTextField.setText(customerList.get(0).getPPS());
+					dobTextField.setText(customerList.get(0).getDOB());
 					customerIDTextField.setText(customerList.get(0).getCustomerID());
 					passwordTextField.setText(customerList.get(0).getPassword());
 
 					firstNameTextField.setEditable(false);
 					surnameTextField.setEditable(false);
-					pPSTextField.setEditable(false);
-					dOBTextField.setEditable(false);
+					ppsTextField.setEditable(false);
+					dobTextField.setEditable(false);
 					customerIDTextField.setEditable(false);
 					passwordTextField.setEditable(false);
 
@@ -853,10 +864,10 @@ public class Menu extends JFrame {
 					gridPanel.add(firstNameTextField);
 					gridPanel.add(surnameLabel);
 					gridPanel.add(surnameTextField);
-					gridPanel.add(pPPSLabel);
-					gridPanel.add(pPSTextField);
-					gridPanel.add(dOBLabel);
-					gridPanel.add(dOBTextField);
+					gridPanel.add(ppsJLabel);
+					gridPanel.add(ppsTextField);
+					gridPanel.add(dobJLabel);
+					gridPanel.add(dobTextField);
 					gridPanel.add(customerIDLabel);
 					gridPanel.add(customerIDTextField);
 					gridPanel.add(passwordLabel);
@@ -869,16 +880,16 @@ public class Menu extends JFrame {
 
 					cancelPanel.add(cancel);
 
-					content.add(gridPanel, BorderLayout.NORTH);
-					content.add(buttonPanel, BorderLayout.CENTER);
-					content.add(cancelPanel, BorderLayout.AFTER_LAST_LINE);
+					contentContainer.add(gridPanel, BorderLayout.NORTH);
+					contentContainer.add(buttonPanel, BorderLayout.CENTER);
+					contentContainer.add(cancelPanel, BorderLayout.AFTER_LAST_LINE);
 					first.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent ae) {
 							position = 0;
 							firstNameTextField.setText(customerList.get(0).getFirstName());
 							surnameTextField.setText(customerList.get(0).getSurname());
-							pPSTextField.setText(customerList.get(0).getPPS());
-							dOBTextField.setText(customerList.get(0).getDOB());
+							ppsTextField.setText(customerList.get(0).getPPS());
+							dobTextField.setText(customerList.get(0).getDOB());
 							customerIDTextField.setText(customerList.get(0).getCustomerID());
 							passwordTextField.setText(customerList.get(0).getPassword());
 						}
@@ -894,8 +905,8 @@ public class Menu extends JFrame {
 
 								firstNameTextField.setText(customerList.get(position).getFirstName());
 								surnameTextField.setText(customerList.get(position).getSurname());
-								pPSTextField.setText(customerList.get(position).getPPS());
-								dOBTextField.setText(customerList.get(position).getDOB());
+								ppsTextField.setText(customerList.get(position).getPPS());
+								dobTextField.setText(customerList.get(position).getDOB());
 								customerIDTextField.setText(customerList.get(position).getCustomerID());
 								passwordTextField.setText(customerList.get(position).getPassword());
 							}
@@ -912,8 +923,8 @@ public class Menu extends JFrame {
 
 								firstNameTextField.setText(customerList.get(position).getFirstName());
 								surnameTextField.setText(customerList.get(position).getSurname());
-								pPSTextField.setText(customerList.get(position).getPPS());
-								dOBTextField.setText(customerList.get(position).getDOB());
+								ppsTextField.setText(customerList.get(position).getPPS());
+								dobTextField.setText(customerList.get(position).getDOB());
 								customerIDTextField.setText(customerList.get(position).getCustomerID());
 								passwordTextField.setText(customerList.get(position).getPassword());
 							}
@@ -928,8 +939,8 @@ public class Menu extends JFrame {
 
 							firstNameTextField.setText(customerList.get(position).getFirstName());
 							surnameTextField.setText(customerList.get(position).getSurname());
-							pPSTextField.setText(customerList.get(position).getPPS());
-							dOBTextField.setText(customerList.get(position).getDOB());
+							ppsTextField.setText(customerList.get(position).getPPS());
+							dobTextField.setText(customerList.get(position).getDOB());
 							customerIDTextField.setText(customerList.get(position).getCustomerID());
 							passwordTextField.setText(customerList.get(position).getPassword());
 						}
@@ -941,7 +952,7 @@ public class Menu extends JFrame {
 							admin();
 						}
 					});
-					setContentPane(content);
+					setContentPane(contentContainer);
 					setSize(400, 300);
 					setVisible(true);
 				}
@@ -950,12 +961,12 @@ public class Menu extends JFrame {
 
 		accountButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
-				f.dispose();
+				jFrame1.dispose();
 
 				if (customerList.isEmpty()) {
-					JOptionPane.showMessageDialog(f, "There are no customers yet!", "Oops!",
+					JOptionPane.showMessageDialog(jFrame1, "There are no customers yet!", "Oops!",
 							JOptionPane.INFORMATION_MESSAGE);
-					f.dispose();
+					jFrame1.dispose();
 					admin();
 				} else {
 					boolean loop = true;
@@ -963,7 +974,7 @@ public class Menu extends JFrame {
 					boolean found = false;
 
 					while (loop) {
-						Object customerID = JOptionPane.showInputDialog(f,
+						Object customerID = JOptionPane.showInputDialog(jFrame1,
 								"Customer ID of Customer You Wish to Add an Account to:");
 
 						for (Customer aCustomer : customerList) {
@@ -977,12 +988,9 @@ public class Menu extends JFrame {
 						if (found == false) {
 							int reply = JOptionPane.showConfirmDialog(null, null, "User not found. Try again?",
 									JOptionPane.YES_NO_OPTION);
-							if (reply == JOptionPane.YES_OPTION) {
-								loop = true;
-							} else if (reply == JOptionPane.NO_OPTION) {
-								f.dispose();
+							if (reply == JOptionPane.NO_OPTION) {
+								jFrame1.dispose();
 								loop = false;
-
 								admin();
 							}
 						} else {
@@ -1000,9 +1008,9 @@ public class Menu extends JFrame {
 								String number = String.valueOf("C" + (customerList.indexOf(customer) + 1) * 10
 										+ (customer.getAccounts().size() + 1));// this simple algorithm generates the
 																				// account number
-								ArrayList<AccountTransaction> transactionList = new ArrayList<AccountTransaction>();
+								ArrayList<AccountTransaction> transactionList = new ArrayList<>();
 								int randomPIN = (int) (Math.random() * 9000) + 1000;
-								String pin = String.valueOf(randomPIN);
+								String pinString = String.valueOf(randomPIN);
 
 								ATMCard atm = new ATMCard(randomPIN, valid);
 
@@ -1010,10 +1018,11 @@ public class Menu extends JFrame {
 										transactionList);
 
 								customer.getAccounts().add(current);
-								JOptionPane.showMessageDialog(f, "Account number = " + number + "\n PIN = " + pin,
+								JOptionPane.showMessageDialog(jFrame1,
+										"Account number = " + number + "\n PIN = " + pinString,
 										"Account created.", JOptionPane.INFORMATION_MESSAGE);
 
-								f.dispose();
+								jFrame1.dispose();
 								admin();
 							}
 
@@ -1030,10 +1039,10 @@ public class Menu extends JFrame {
 										transactionList);
 
 								customer.getAccounts().add(deposit);
-								JOptionPane.showMessageDialog(f, "Account number = " + number, "Account created.",
+								JOptionPane.showMessageDialog(jFrame1, "Account number = " + number, "Account created.",
 										JOptionPane.INFORMATION_MESSAGE);
 
-								f.dispose();
+								jFrame1.dispose();
 								admin();
 							}
 						}
@@ -1044,7 +1053,7 @@ public class Menu extends JFrame {
 
 		deleteCustomer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
-				boolean found = true, loop = true;
+				boolean found = true;
 
 				if (customerList.isEmpty()) {
 					JOptionPane.showMessageDialog(null, "There are currently no customers to display. ");
@@ -1052,37 +1061,31 @@ public class Menu extends JFrame {
 					admin();
 				} else {
 					{
-						Object customerID = JOptionPane.showInputDialog(f,
+						Object customerID = JOptionPane.showInputDialog(jFrame1,
 								"Customer ID of Customer You Wish to Delete:");
 
 						for (Customer aCustomer : customerList) {
 
 							if (aCustomer.getCustomerID().equals(customerID)) {
-								found = true;
 								customer = aCustomer;
-								loop = false;
 							}
 						}
 
-						if (found == false) {
+						if (!found) {
 							int reply = JOptionPane.showConfirmDialog(null, null, "User not found. Try again?",
 									JOptionPane.YES_NO_OPTION);
-							if (reply == JOptionPane.YES_OPTION) {
-								loop = true;
-							} else if (reply == JOptionPane.NO_OPTION) {
-								f.dispose();
-								loop = false;
-
+							if (reply == JOptionPane.NO_OPTION) {
+								jFrame1.dispose();
 								admin();
 							}
 						} else {
-							if (customer.getAccounts().size() > 0) {
-								JOptionPane.showMessageDialog(f,
+							if (!customer.getAccounts().isEmpty()) {
+								JOptionPane.showMessageDialog(jFrame1,
 										"This customer has accounts. \n You must delete a customer's accounts before deleting a customer ",
 										"Oops!", JOptionPane.INFORMATION_MESSAGE);
 							} else {
 								customerList.remove(customer);
-								JOptionPane.showMessageDialog(f, "Customer Deleted ", "Success.",
+								JOptionPane.showMessageDialog(jFrame1, "Customer Deleted ", "Success.",
 										JOptionPane.INFORMATION_MESSAGE);
 							}
 						}
@@ -1097,25 +1100,19 @@ public class Menu extends JFrame {
 				boolean found = true, loop = true;
 
 				{
-					Object customerID = JOptionPane.showInputDialog(f,
+					Object customerID = JOptionPane.showInputDialog(jFrame1,
 							"Customer ID of Customer from which you wish to delete an account");
 					for (Customer aCustomer : customerList) {
 						if (aCustomer.getCustomerID().equals(customerID)) {
-							found = true;
 							customer = aCustomer;
-							loop = false;
 						}
 					}
 
-					if (found == false) {
+					if (!found) {
 						int reply = JOptionPane.showConfirmDialog(null, null, "User not found. Try again?",
 								JOptionPane.YES_NO_OPTION);
-						if (reply == JOptionPane.YES_OPTION) {
-							loop = true;
-						} else if (reply == JOptionPane.NO_OPTION) {
-							f.dispose();
-							loop = false;
-
+						if (reply == JOptionPane.NO_OPTION) {
+							jFrame1.dispose();
 							admin();
 						}
 					} else {
@@ -1128,29 +1125,30 @@ public class Menu extends JFrame {
 		});
 		returnButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
-				f.dispose();
+				jFrame1.dispose();
 				menuStart();
 			}
 		});
 	}
 
 	public void customer(Customer e1) {
-		f = new JFrame("Customer Menu");
+		jFrame1 = new JFrame("Customer Menu");
 		e1 = e;
-		f.setSize(400, 300);
-		f.setLocation(200, 200);
-		f.addWindowListener(new WindowAdapter() {
+		jFrame1.setSize(400, 300);
+		jFrame1.setLocation(200, 200);
+		jFrame1.addWindowListener(new WindowAdapter() {
+			@Override
 			public void windowClosing(WindowEvent we) {
 				System.exit(0);
 			}
 		});
-		f.setVisible(true);
+		jFrame1.setVisible(true);
 
-		if (e.getAccounts().size() == 0) {
-			JOptionPane.showMessageDialog(f,
+		if (e.getAccounts().isEmpty()) {
+			JOptionPane.showMessageDialog(jFrame1,
 					"This customer does not have any accounts yet. \n An admin must create an account for this customer \n for them to be able to use customer functionality. ",
 					"Oops!", JOptionPane.INFORMATION_MESSAGE);
-			f.dispose();
+			jFrame1.dispose();
 			menuStart();
 		} else {
 			JPanel buttonPanel = new JPanel();
@@ -1165,7 +1163,7 @@ public class Menu extends JFrame {
 			JButton continueButton = new JButton("Continue");
 			buttonPanel.add(continueButton);
 
-			JComboBox<String> box = new JComboBox<String>();
+			JComboBox<String> box = new JComboBox<>();
 			for (int i = 0; i < e.getAccounts().size(); i++) {
 				box.addItem(e.getAccounts().get(i).getNumber());
 			}
@@ -1177,15 +1175,15 @@ public class Menu extends JFrame {
 			}
 
 			boxPanel.add(box);
-			content = f.getContentPane();
-			content.setLayout(new GridLayout(3, 1));
-			content.add(labelPanel);
-			content.add(boxPanel);
-			content.add(buttonPanel);
+			contentContainer = jFrame1.getContentPane();
+			contentContainer.setLayout(new GridLayout(3, 1));
+			contentContainer.add(labelPanel);
+			contentContainer.add(boxPanel);
+			contentContainer.add(buttonPanel);
 
 			returnButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent ae) {
-					f.dispose();
+					jFrame1.dispose();
 					menuStart();
 				}
 			});
@@ -1193,17 +1191,18 @@ public class Menu extends JFrame {
 			continueButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent ae) {
 
-					f.dispose();
+					jFrame1.dispose();
 
-					f = new JFrame("Customer Menu");
-					f.setSize(400, 300);
-					f.setLocation(200, 200);
-					f.addWindowListener(new WindowAdapter() {
+					jFrame1 = new JFrame("Customer Menu");
+					jFrame1.setSize(400, 300);
+					jFrame1.setLocation(200, 200);
+					jFrame1.addWindowListener(new WindowAdapter() {
+						@Override
 						public void windowClosing(WindowEvent we) {
 							System.exit(0);
 						}
 					});
-					f.setVisible(true);
+					jFrame1.setVisible(true);
 
 					JPanel statementPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 					JButton statementButton = new JButton("Display Bank Statement");
@@ -1227,26 +1226,27 @@ public class Menu extends JFrame {
 
 					JLabel label1 = new JLabel("Please select an option");
 
-					content = f.getContentPane();
-					content.setLayout(new GridLayout(5, 1));
-					content.add(label1);
-					content.add(statementPanel);
-					content.add(lodgementPanel);
-					content.add(withdrawalPanel);
-					content.add(returnPanel);
+					contentContainer = jFrame1.getContentPane();
+					contentContainer.setLayout(new GridLayout(5, 1));
+					contentContainer.add(label1);
+					contentContainer.add(statementPanel);
+					contentContainer.add(lodgementPanel);
+					contentContainer.add(withdrawalPanel);
+					contentContainer.add(returnPanel);
 
 					statementButton.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent ae) {
-							f.dispose();
-							f = new JFrame("Customer Menu");
-							f.setSize(400, 600);
-							f.setLocation(200, 200);
-							f.addWindowListener(new WindowAdapter() {
+							jFrame1.dispose();
+							jFrame1 = new JFrame("Customer Menu");
+							jFrame1.setSize(400, 600);
+							jFrame1.setLocation(200, 200);
+							jFrame1.addWindowListener(new WindowAdapter() {
+								@Override
 								public void windowClosing(WindowEvent we) {
 									System.exit(0);
 								}
 							});
-							f.setVisible(true);
+							jFrame1.setVisible(true);
 
 							JLabel label1 = new JLabel("Summary of account transactions: ");
 
@@ -1272,17 +1272,15 @@ public class Menu extends JFrame {
 							}
 
 							textPanel.add(textArea);
-							content.removeAll();
+							contentContainer.removeAll();
 
-							Container content = f.getContentPane();
-							content.setLayout(new GridLayout(1, 1));
-							// content.add(label1);
-							content.add(textPanel);
-							// content.add(returnPanel);
+							contentContainer = jFrame1.getContentPane();
+							contentContainer.setLayout(new GridLayout(1, 1));
+							contentContainer.add(textPanel);
 
 							returnButton.addActionListener(new ActionListener() {
 								public void actionPerformed(ActionEvent ae) {
-									f.dispose();
+									jFrame1.dispose();
 									customer(e);
 								}
 							});
@@ -1295,55 +1293,54 @@ public class Menu extends JFrame {
 							boolean on = true;
 							double balance = 0;
 
-							if (acc instanceof CustomerCurrentAccount) {
+							if (acc instanceof CustomerCurrentAccount customerCurrentAccount) {
 								int count = 3;
-								int checkPin = ((CustomerCurrentAccount) acc).getAtm().getPin();
+								int checkPin = customerCurrentAccount.getAtm().getPin();
 								loop = true;
 
 								while (loop) {
 									if (count == 0) {
-										JOptionPane.showMessageDialog(f,
+										JOptionPane.showMessageDialog(jFrame1,
 												"Pin entered incorrectly 3 times. ATM card locked.", "Pin",
 												JOptionPane.INFORMATION_MESSAGE);
-										((CustomerCurrentAccount) acc).getAtm().setValid(false);
+										customerCurrentAccount.getAtm().setValid(false);
 										customer(e);
 										loop = false;
 										on = false;
 									}
 
-									String Pin = JOptionPane.showInputDialog(f, "Enter 4 digit PIN;");
-									int i = Integer.parseInt(Pin);
+									int pin = Integer
+											.parseInt(JOptionPane.showInputDialog(jFrame1, "Enter 4 digit PIN;"));
 
 									if (on) {
-										if (checkPin == i) {
+										if (checkPin == pin) {
 											loop = false;
-											JOptionPane.showMessageDialog(f, "Pin entry successful", "Pin",
+											JOptionPane.showMessageDialog(jFrame1, "Pin entry successful", "Pin",
 													JOptionPane.INFORMATION_MESSAGE);
 
 										} else {
 											count--;
-											JOptionPane.showMessageDialog(f,
+											JOptionPane.showMessageDialog(jFrame1,
 													"Incorrect pin. " + count + " attempts remaining.", "Pin",
 													JOptionPane.INFORMATION_MESSAGE);
 										}
 									}
 								}
 							}
-							if (on == true) {
-								String balanceTest = JOptionPane.showInputDialog(f, "Enter amount you wish to lodge:");
+							if (on) {
+								String balanceTest = JOptionPane.showInputDialog(jFrame1,
+										"Enter amount you wish to lodge:");
 								// the isNumeric method tests to see if the string entered was numeric.
 								if (isNumeric(balanceTest)) {
 									balance = Double.parseDouble(balanceTest);
-									loop = false;
 								} else {
-									JOptionPane.showMessageDialog(f, "You must enter a numerical value!", "Oops!",
+									JOptionPane.showMessageDialog(jFrame1, "You must enter a numerical value!", "Oops!",
 											JOptionPane.INFORMATION_MESSAGE);
 								}
 
 								String euro = "\u20ac";
 								acc.setBalance(acc.getBalance() + balance);
-								// String date = new
-								// SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+								// String date = new //
 								Date date = new Date();
 								String date2 = date.toString();
 								String type = "Lodgement";
@@ -1352,9 +1349,10 @@ public class Menu extends JFrame {
 								AccountTransaction transaction = new AccountTransaction(date2, type, amount);
 								acc.getTransactionList().add(transaction);
 
-								JOptionPane.showMessageDialog(f, balance + euro + " added do you account!", "Lodgement",
+								JOptionPane.showMessageDialog(jFrame1, balance + euro + " added do you account!",
+										"Lodgement",
 										JOptionPane.INFORMATION_MESSAGE);
-								JOptionPane.showMessageDialog(f, "New balance = " + acc.getBalance() + euro,
+								JOptionPane.showMessageDialog(jFrame1, "New balance = " + acc.getBalance() + euro,
 										"Lodgement", JOptionPane.INFORMATION_MESSAGE);
 							}
 						}
@@ -1366,14 +1364,14 @@ public class Menu extends JFrame {
 							boolean on = true;
 							double withdraw = 0;
 
-							if (acc instanceof CustomerCurrentAccount) {
+							if (acc instanceof CustomerCurrentAccount customerCurrentAccount) {
 								int count = 3;
-								int checkPin = ((CustomerCurrentAccount) acc).getAtm().getPin();
+								int checkPin = customerCurrentAccount.getAtm().getPin();
 								loop = true;
 
 								while (loop) {
 									if (count == 0) {
-										JOptionPane.showMessageDialog(f,
+										JOptionPane.showMessageDialog(jFrame1,
 												"Pin entered incorrectly 3 times. ATM card locked.", "Pin",
 												JOptionPane.INFORMATION_MESSAGE);
 										((CustomerCurrentAccount) acc).getAtm().setValid(false);
@@ -1382,44 +1380,42 @@ public class Menu extends JFrame {
 										on = false;
 									}
 
-									String Pin = JOptionPane.showInputDialog(f, "Enter 4 digit PIN;");
-									int i = Integer.parseInt(Pin);
+									int pin = Integer
+											.parseInt(JOptionPane.showInputDialog(jFrame1, "Enter 4 digit PIN;"));
 
 									if (on) {
-										if (checkPin == i) {
+										if (checkPin == pin) {
 											loop = false;
-											JOptionPane.showMessageDialog(f, "Pin entry successful", "Pin",
+											JOptionPane.showMessageDialog(jFrame1, "Pin entry successful", "Pin",
 													JOptionPane.INFORMATION_MESSAGE);
 										} else {
 											count--;
-											JOptionPane.showMessageDialog(f,
+											JOptionPane.showMessageDialog(jFrame1,
 													"Incorrect pin. " + count + " attempts remaining.", "Pin",
 													JOptionPane.INFORMATION_MESSAGE);
 										}
 									}
 								}
 							}
-							if (on == true) {
-								String balanceTest = JOptionPane.showInputDialog(f,
+							if (on) {
+								String balanceTest = JOptionPane.showInputDialog(jFrame1,
 										"Enter amount you wish to withdraw (max 500):");// the isNumeric method tests to
 																						// see if the string entered was
 																						// numeric.
 								if (isNumeric(balanceTest)) {
-
 									withdraw = Double.parseDouble(balanceTest);
-									loop = false;
-
 								} else {
-									JOptionPane.showMessageDialog(f, "You must enter a numerical value!", "Oops!",
+									JOptionPane.showMessageDialog(jFrame1, "You must enter a numerical value!", "Oops!",
 											JOptionPane.INFORMATION_MESSAGE);
 								}
 								if (withdraw > 500) {
-									JOptionPane.showMessageDialog(f, "500 is the maximum you can withdraw at a time.",
+									JOptionPane.showMessageDialog(jFrame1,
+											"500 is the maximum you can withdraw at a time.",
 											"Oops!", JOptionPane.INFORMATION_MESSAGE);
 									withdraw = 0;
 								}
 								if (withdraw > acc.getBalance()) {
-									JOptionPane.showMessageDialog(f, "Insufficient funds.", "Oops!",
+									JOptionPane.showMessageDialog(jFrame1, "Insufficient funds.", "Oops!",
 											JOptionPane.INFORMATION_MESSAGE);
 									withdraw = 0;
 								}
@@ -1427,8 +1423,6 @@ public class Menu extends JFrame {
 								String euro = "\u20ac";
 								acc.setBalance(acc.getBalance() - withdraw);
 								// recording transaction:
-								// String date = new
-								// SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
 								Date date = new Date();
 								String date2 = date.toString();
 
@@ -1438,9 +1432,10 @@ public class Menu extends JFrame {
 								AccountTransaction transaction = new AccountTransaction(date2, type, amount);
 								acc.getTransactionList().add(transaction);
 
-								JOptionPane.showMessageDialog(f, withdraw + euro + " withdrawn.", "Withdraw",
+								JOptionPane.showMessageDialog(jFrame1, withdraw + euro + " withdrawn.", "Withdraw",
 										JOptionPane.INFORMATION_MESSAGE);
-								JOptionPane.showMessageDialog(f, "New balance = " + acc.getBalance() + euro, "Withdraw",
+								JOptionPane.showMessageDialog(jFrame1, "New balance = " + acc.getBalance() + euro,
+										"Withdraw",
 										JOptionPane.INFORMATION_MESSAGE);
 							}
 						}
@@ -1448,7 +1443,7 @@ public class Menu extends JFrame {
 
 					returnButton.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent ae) {
-							f.dispose();
+							jFrame1.dispose();
 							menuStart();
 						}
 					});
@@ -1460,7 +1455,7 @@ public class Menu extends JFrame {
 	public static boolean isNumeric(String str) // a method that tests if a string is numeric
 	{
 		try {
-			double d = Double.parseDouble(str);
+			Double.parseDouble(str);
 		} catch (NumberFormatException nfe) {
 			return false;
 		}
