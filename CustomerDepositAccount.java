@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+import java.util.List;
 
 public class CustomerDepositAccount extends CustomerAccount {
 	double interestRate;
@@ -9,7 +9,7 @@ public class CustomerDepositAccount extends CustomerAccount {
 	}
 
 	public CustomerDepositAccount(double interestRate, String number, double balance,
-			ArrayList<AccountTransaction> transactionList) {
+			List<AccountTransaction> transactionList) {
 		super(number, balance, transactionList);
 		this.interestRate = interestRate;
 	}

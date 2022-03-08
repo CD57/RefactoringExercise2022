@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+import java.util.List;
 
 public class CustomerCurrentAccount extends CustomerAccount {
 	ATMCard atm;
@@ -9,7 +9,7 @@ public class CustomerCurrentAccount extends CustomerAccount {
 	}
 
 	public CustomerCurrentAccount(ATMCard atm, String number, double balance,
-			ArrayList<AccountTransaction> transactionList) {
+			List<AccountTransaction> transactionList) {
 		super(number, balance, transactionList);
 		this.atm = atm;
 	}
